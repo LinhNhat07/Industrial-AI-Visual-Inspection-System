@@ -1,7 +1,7 @@
-<h1 align="center">🏭 Industrial Smart Quality Control System</h1>
+<h1 align="center">🏭 Industrial AI Vision Projects</h1>
 
 <p align="center">
-  <b>Real-time AI visual inspection and automatic defect rejection on production lines, running on edge devices</b>
+  <b>AI visual inspection systems I built and deployed on real production lines at Hondaplus Vietnam: edge AI, industrial cameras, PLC integration</b>
 </p>
 
 <p align="center">
@@ -13,17 +13,31 @@
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
 </p>
 
-> **Note:** This is an industrial project built at Hondaplus Vietnam. The source code and data are proprietary, so this repository is a **technical showcase** of the system's design and results. See the demo videos for the system running on real production lines.
+> **Note:** These are industrial projects built at Hondaplus Vietnam. Source code, models and production data are proprietary, so this repository is a **technical showcase** of the systems' design, engineering and results. See the demo videos for the systems running on real production lines.
 
 ---
 
-## 📌 Overview
+## 📂 Projects
+
+| Project | Task | Stack | Details |
+|---|---|---|---|
+| 🍶 **MKA-B9: Bottle-Bottom Thread Inspection** | Detect ultra-thin plastic threads on bottle bottoms; PLC-triggered capture and NG reject | RT-DETRv2 (two-stage), TensorRT FP16, Jetson Orin Nano, Basler, Keyence PLC, FastAPI | [README](projects/MKA-B9-Bottle-Bottom-Thread-Inspection/README.md) |
+| 👁️ **Defect Classification for Small-Scale Flaws** | Fine-grained classification of 6 defect types on eye-drop bottles | Keyence XG-X, YOLOv11, TensorRT, RTX 5060 | [Repository](https://github.com/LinhNhat07/Defect-Classification-for-Medium-and-Small-Scale-Flaws) |
+
+More projects will be added under [`projects/`](projects/).
+
+---
+
+## 📌 Overview: Common Platform
+
+The sections below describe the common platform shared by these inspection systems.
+
 
 A smart quality control (QC) system that automates visual inspection on **real conveyor lines**, running 24/7. Images come straight from industrial cameras, AI models decide OK/NG on edge devices, and defective products are **removed from the line automatically** through the PLC.
 
 The system is in production at the company in Vietnam and at its **parent company in Japan**.
 
-## 🎯 Target Defects
+## 🎯 Example Target Defects (labeling & bottle-neck lines)
 
 | Defect | Description |
 |---|---|
@@ -62,7 +76,7 @@ flowchart LR
 
 ## 🧠 Models
 
-- **Object detection:** researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet, SSD-MobileNet and RT-DETR
+- **Object detection:** researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet, SSD-MobileNet and RT-DETR (RT-DETRv2 in production on MKA-B9)
 - **Anomaly detection:** **PatchCore** for cases where defect samples are rare
 - **Segmentation:** **DeepLabV3** with ResNet / ViT backbones
 - **Classification:** ResNet, CNN and Vision Transformer, with YOLO + ViT ensembles on complex lines
@@ -106,10 +120,6 @@ flowchart LR
 ## 🛠️ Tech Stack
 
 `Python` · `PyTorch` · `TensorFlow` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `PostgreSQL` · `PyQt5` · `FastAPI` · `Flask` · `Docker` · `PLC` · `RS485` · `ESP32` · `Telegram API`
-
-## 🔗 Related
-
-- [Defect Classification for Medium and Small-Scale Flaws](https://github.com/LinhNhat07/Defect-Classification-for-Medium-and-Small-Scale-Flaws): Keyence XG-X + YOLOv11 hybrid inspection
 
 ## 👤 Author
 
