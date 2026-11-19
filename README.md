@@ -1,121 +1,116 @@
-## 💡 Industrial & Real-world Projects
+<h1 align="center">🏭 Industrial Smart Quality Control System</h1>
 
-# 🏭 Industrial Smart Quality Control System
+<p align="center">
+  <b>Real-time AI visual inspection and automatic defect rejection on production lines, running on edge devices</b>
+</p>
 
-## 📌 Tổng quan dự án (Project Overview)
-Hệ thống kiểm soát chất lượng thông minh (Smart QC) ứng dụng trí tuệ nhân tạo để tự động hóa quy trình kiểm tra ngoại quan trên **băng chuyền sản xuất thực tế**. Hệ thống được thiết kế để hoạt động 24/7, thu thập dữ liệu thực tế và đưa ra quyết định loại bỏ sản phẩm lỗi ngay trên các thiết bị Edge Computing.
+<p align="center">
+  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=drive_link"><img src="https://img.shields.io/badge/Demo-Video-FF0000?style=flat-square&logo=googledrive&logoColor=white" alt="Demo"/></a>
+  <img src="https://img.shields.io/badge/NVIDIA%20Jetson-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="Jetson"/>
+  <img src="https://img.shields.io/badge/TensorRT-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="TensorRT"/>
+  <img src="https://img.shields.io/badge/ONNX-005CED?style=flat-square&logo=onnx&logoColor=white" alt="ONNX"/>
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white" alt="OpenCV"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+</p>
 
-## Demo: [https://drive.google.com/drive/folders/1eB9T30dr32sdrMfVHRAxU4xskb_FIG_o?usp=drive_link](https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=drive_link)
----
-
-# 🏭 Industrial Smart Quality Control System
-
-## 📌 Tổng quan dự án (Project Overview)
-Hệ thống kiểm soát chất lượng thông minh (Smart QC) ứng dụng trí tuệ nhân tạo để tự động hóa quy trình kiểm tra ngoại quan trên **băng chuyền sản xuất thực tế**. Hệ thống được thiết kế để hoạt động 24/7, thu thập dữ liệu thực tế và đưa ra quyết định loại bỏ sản phẩm lỗi ngay trên các thiết bị Edge Computing.
-
----
-
-## 🎯 Mục tiêu & Các lỗi mục tiêu (Target Defects)
-Hệ thống thực hiện kiểm soát 100% sản phẩm, tập trung vào các lỗi nhãn mác và khuyết tật bao bì phổ biến:
-
-* **Ngược nhãn (Inverted Label):** Nhãn bị xoay sai hướng (180°) do lỗi cấp phôi.
-* **Sai kích thước (Wrong Label Size):** Nhầm lẫn giữa các loại nhãn của các mã hàng (SKU) khác nhau.
-* **Vị trí nhãn sai (Wrong Position):** Nhãn dán không đúng tọa độ quy định.
-* **Lệch nhãn/tem (Skew/Alignment Error):** Nhãn bị dán nghiêng, lệch trục hoặc nhăn bề mặt.
-* **Sai ren cổ chai (Bottle Neck Thread Defect):** Phát hiện các lỗi biến dạng ren, ren bị mẻ, thiếu ren hoặc sai bước ren, đảm bảo nắp chai có thể đóng kín tuyệt đối.
-
-
+> **Note:** This is an industrial project built at Hondaplus Vietnam. The source code and data are proprietary, so this repository is a **technical showcase** of the system's design and results. See the demo videos for the system running on real production lines.
 
 ---
 
-## ⚙️ Tối ưu hóa & Triển khai (Optimization & Deployment)
+## 📌 Overview
 
-Để đáp ứng yêu cầu xử lý thời gian thực trên băng chuyền tốc độ cao với tài nguyên giới hạn, hệ thống áp dụng các kỹ thuật nén và tăng tốc mô hình:
+A smart quality control (QC) system that automates visual inspection on **real conveyor lines**, running 24/7. Images come straight from industrial cameras, AI models decide OK/NG on edge devices, and defective products are **removed from the line automatically** through the PLC.
 
-### 🚀 Model Optimization Pipeline
-* **ONNX Conversion:** Chuyển đổi các mô hình từ framework gốc (PyTorch/TensorFlow) sang định dạng trung gian **ONNX** để tối ưu hóa đồ thị tính toán.
-* **TensorRT Acceleration:** Sử dụng thư viện **NVIDIA TensorRT** để tối ưu hóa mô hình cho nhân Tensor trên GPU.
-* **Engine File Generation:** Biên dịch mô hình thành file **.engine** (Serialization) giúp giảm tối đa kích thước và tăng tốc độ suy luận (Inference) lên gấp 3-5 lần.
-* **Quantization:** Áp dụng kỹ thuật FP16 hoặc INT8 quantization để giảm dung lượng mô hình mà vẫn giữ được độ chính xác cần thiết cho thiết bị nhúng.
+The system is in production at the company in Vietnam and at its **parent company in Japan**.
 
-### ⚡ Edge AI Platforms
-* **NVIDIA Jetson Orin:** Chạy các mô hình Ensemble (YOLO + ViT) cho dây chuyền phức tạp.
-* **NVIDIA Jetson Nano:** Triển khai các bản mô hình đã rút gọn (Engine file) cho các tác vụ phân loại cơ bản.
-* **Workstation:** `NVIDIA RTX 5060` dùng để huấn luyện và quản lý dữ liệu tập trung.
+## 🎯 Target Defects
 
----
+| Defect | Description |
+|---|---|
+| Inverted label | Label rotated 180° due to feeding errors |
+| Wrong label size | Label from a different SKU |
+| Wrong position | Label not at the specified coordinates |
+| Skew / misalignment | Tilted, off-axis or wrinkled label |
+| Bottle neck thread defect | Deformed, chipped, missing or wrong-pitch threads that prevent a tight seal |
 
-## 🛠 Tech Stack & Kiến trúc mô hình
-* **Core Models:** `YOLOv11s`, `YOLOv8n`, `ResNet`, `CNN`, `Vision Transformer (ViT)`.
-* **Image Processing:** `OpenCV` (Thu thập và tiền xử lý ảnh từ Camera Keyence, Basler, Cognex).
-* **Storage:** `PostgreSQL` lưu trữ Log lỗi và Metadata.
-* **Inference Engine:** `ONNX Runtime` & `TensorRT`.
+## 🏗️ System Architecture
 
----
+```mermaid
+flowchart LR
+    subgraph Capture
+        CAM[Industrial cameras<br/>Keyence · Basler · Cognex · Dino-Lite]
+    end
+    subgraph Edge["Edge AI (Jetson Orin / Nano, RTX 5060)"]
+        GS[OpenCV + GStreamer<br/>HW-accelerated capture]
+        INF[TensorRT engine<br/>YOLO · ViT · PatchCore]
+    end
+    subgraph Action
+        PLC[PLC] --> REJ[Air blower /<br/>robot arm reject]
+        IO[RS485 / ESP32] --> ALARM[Buzzer &<br/>warning light]
+        TG[Telegram alert]
+    end
+    subgraph Monitor
+        DB[(PostgreSQL<br/>logs & statistics)]
+        UI[PyQt5 desktop app<br/>FastAPI / Flask dashboard]
+    end
+    CAM --> GS --> INF
+    INF -- NG --> PLC
+    INF -- NG --> IO
+    INF -- NG --> TG
+    INF --> DB --> UI
+```
 
-## 📊 Dữ liệu & Chỉ số hiệu năng (Data & Metrics)
+## 🧠 Models
 
-### 📥 Thu thập dữ liệu thực tế (Real-world Data Collection)
-* **Dữ liệu hiện trường:** Trực tiếp thu thập từ camera công nghiệp trên băng chuyền để lấy mẫu các điều kiện thực tế (ánh sáng thay đổi, rung động cơ học, độ mờ của chai nựa).
-* **Augmentation:** Xử lý vấn đề Class Imbalance (lỗi ren và nhãn thường hiếm hơn sản phẩm đạt) bằng cách mô phỏng các lỗi thực tế.
+- **Object detection:** researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet, SSD-MobileNet and RT-DETR
+- **Anomaly detection:** **PatchCore** for cases where defect samples are rare
+- **Segmentation:** **DeepLabV3** with ResNet / ViT backbones
+- **Classification:** ResNet, CNN and Vision Transformer, with YOLO + ViT ensembles on complex lines
 
-### 📈 Chỉ số hiệu năng mục tiêu
-Hệ thống ưu tiên chỉ số **Precision** (Độ chính xác xác nhận) để tránh việc dừng máy hoặc loại bỏ nhầm sản phẩm đạt chuẩn.
+## ⚡ Edge Optimization
 
-| Chỉ số | Giá trị mục tiêu | Ghi chú |
-| :--- | :--- | :--- |
-| **Precision** | **0.85 - 0.93** | Đảm bảo tính tin cậy của quyết định loại bỏ |
-| **Tốc độ xử lý** | **< 30ms / sản phẩm** | Đã tối ưu qua TensorRT Engine |
-| **Môi trường** | **Băng chuyền thực tế** | Hoạt động ổn định 24/7 dưới rung động công nghiệp |
+| Step | Purpose |
+|---|---|
+| PyTorch / TensorFlow → **ONNX** | Framework-independent, optimized compute graph |
+| ONNX → **TensorRT `.engine`** | Kernels tuned for NVIDIA Tensor Cores |
+| **FP16 / INT8** quantization | Smaller model, faster inference on embedded devices |
 
----
+| Platform | Role |
+|---|---|
+| NVIDIA Jetson Orin | YOLO + ViT ensembles on complex lines |
+| NVIDIA Jetson Nano / Raspberry Pi | Lightweight engines for simpler tasks |
+| RTX 5060 workstation | Training, data management, high-resolution inference |
 
-## ⚠️ Thách thức kỹ thuật
-* **Hardware Constraints:** Tối ưu hóa mô hình nặng (ViT/ResNet) để chạy mượt mà trên tài nguyên giới hạn của Jetson Nano.
-* **Small Defect Detection:** Lỗi ren cổ chai thường rất nhỏ, đòi hỏi độ phân giải camera cao và mô hình AI nhạy cảm với các chi tiết tinh vi.
-* **Real-time Sync:** Đồng bộ hóa tín hiệu từ AI đến hệ thống cơ khí loại bỏ sản phẩm trên băng chuyền.
+## 📊 Results
 
+| Metric | Value |
+|---|---|
+| Accuracy (mAP@50) | **0.89 – 0.99** depending on product and defect type |
+| Inference latency | **< 20 ms** per product (TensorRT) |
+| Environment | Real conveyor lines, 24/7, with industrial vibration and changing light |
 
----
+**Precision is prioritized** so that good products are not rejected and the line is not stopped unnecessarily.
 
-## ⚙️ Tối ưu hóa & Triển khai (Optimization & Deployment)
+## 🗂️ Data
 
-Để đáp ứng yêu cầu xử lý thời gian thực trên băng chuyền tốc độ cao với tài nguyên giới hạn, hệ thống áp dụng các kỹ thuật nén và tăng tốc mô hình:
+- Collected directly from cameras on the production line to capture real conditions (changing light, mechanical vibration, translucent plastic bottles)
+- Noise filtering and manual labeling to build a high-quality ground-truth dataset
+- Augmentation that simulates rare defects to handle class imbalance
 
-### 🚀 Model Optimization Pipeline
-* **ONNX Conversion:** Chuyển đổi các mô hình từ framework gốc (PyTorch/TensorFlow) sang định dạng trung gian **ONNX** để tối ưu hóa đồ thị tính toán.
-* **TensorRT Acceleration:** Sử dụng thư viện **NVIDIA TensorRT** để tối ưu hóa mô hình cho nhân Tensor trên GPU.
-* **Engine File Generation:** Biên dịch mô hình thành file **.engine** (Serialization) giúp giảm tối đa kích thước và tăng tốc độ suy luận (Inference) lên gấp 3-5 lần so với thông thường.
-* **Quantization:** Áp dụng kỹ thuật FP16 hoặc INT8 quantization để giảm dung lượng mô hình mà vẫn giữ được độ chính xác cần thiết.
+## ⚠️ Technical Challenges
 
-### ⚡ Edge AI Platforms
-* **NVIDIA Jetson Orin:** Chạy các mô hình Ensemble (YOLO + ViT) cho dây chuyền phức tạp.
-* **NVIDIA Jetson Nano:** Triển khai các bản mô hình đã rút gọn (Engine file) cho các tác vụ phân loại cơ bản.
-* **Workstation:** `NVIDIA RTX 5060` dùng để huấn luyện và quản lý dữ liệu tập trung.
+- **Hardware limits:** running heavy models (ViT / ResNet) smoothly on Jetson Nano
+- **Tiny defects:** thread defects are very small and need high-resolution cameras and sensitive models
+- **Real-time sync:** getting the AI decision to the mechanical rejector in time on a moving conveyor
 
----
+## 🛠️ Tech Stack
 
-## 🛠 Tech Stack & Kiến trúc mô hình
-* **Core Models:** `YOLOv11s`, `YOLOv8n`, `ResNet`, `CNN`, `Vision Transformer (ViT)`.
-* **Image Processing:** `OpenCV` (Thu thập và tiền xử lý ảnh từ Camera Keyence, Basler, Cognex).
-* **Storage:** `PostgreSQL` lưu trữ Log lỗi và Metadata.
-* **Inference:** `ONNX Runtime` & `TensorRT`.
+`Python` · `PyTorch` · `TensorFlow` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `PostgreSQL` · `PyQt5` · `FastAPI` · `Flask` · `Docker` · `PLC` · `RS485` · `ESP32` · `Telegram API`
 
----
+## 🔗 Related
 
-## 📊 Dữ liệu & Chỉ số hiệu năng (Data & Metrics)
+- [Defect Classification for Medium and Small-Scale Flaws](https://github.com/LinhNhat07/Defect-Classification-for-Medium-and-Small-Scale-Flaws): Keyence XG-X + YOLOv11 hybrid inspection
 
-### 📥 Thu thập dữ liệu thực tế (Real-world Data Collection)
-* **Dữ liệu hiện trường:** Trực tiếp thu thập từ camera công nghiệp trên băng chuyền để lấy mẫu các điều kiện thực tế (ánh sáng thay đổi, rung động cơ học).
-* **Augmentation:** Xử lý vấn đề Class Imbalance bằng cách mô phỏng các lỗi hiếm gặp từ dữ liệu thực tế thu được.
+## 👤 Author
 
-### 📈 Chỉ số hiệu năng mục tiêu
-Hệ thống ưu tiên chỉ số **Precision** (Độ chính xác xác nhận) để tránh việc dừng máy hoặc loại bỏ nhầm sản phẩm đạt chuẩn.
-
-| Chỉ số | Giá trị mục tiêu | Ghi chú |
-| :--- | :--- | :--- |
-| **Precision** | **0.85 - 0.99** | Đảm bảo tính tin cậy của quyết định loại bỏ |
-| **Tốc độ xử lý** | **< 30ms / sản phẩm** | Đã tối ưu qua TensorRT Engine |
-| **Môi trường** | **Băng chuyền thực tế** | Chịu được các tác động môi trường nhà xưởng |
-
----
+**Nguyen Hong Nhat Linh** – AI Engineer · [GitHub](https://github.com/LinhNhat07) · nlinh.nh7@gmail.com
