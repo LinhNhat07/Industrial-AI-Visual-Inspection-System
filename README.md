@@ -157,14 +157,16 @@ flowchart LR
 
 ## 📊 Results
 
-| Metric | Value |
-|---|---|
-| Accuracy (mAP@50) | **0.89 – 0.99** depending on product and defect type |
-| Inference latency | **< 20 ms** per product (TensorRT) |
-| Camera resolution | Up to **3840 × 2748** |
-| Environment | Real conveyor lines, 24/7, with industrial vibration and changing light |
+| Metric | 1 · Appearance inspection | 2 · Label inspection |
+|---|---|---|
+| Processing time per image | **~290 ms** (crop ~80 ms + defect ~210 ms) | **~150 ms** |
+| Input | **3840 × 2748** (10 MP) image → cropped ~2700 × 2300 → defect model at 1280 × 1280 | 1–2 camera streams with per-camera ROI |
+| Hardware | Jetson Orin Nano Super · TensorRT FP16 | NVIDIA Jetson (also runs on a Windows PC) |
+| Environment | Real production line, 24/7 | Real production line, 24/7 |
 
-**Precision is prioritized** so that good products are not rejected and the line is not stopped unnecessarily.
+- **Accuracy:** mAP@50 of **0.89 – 0.99** across products and defect types.
+- Both systems run within the cycle time of their production lines.
+- **Precision is prioritized** so that good products are not rejected and the line is not stopped unnecessarily.
 
 ## ⚡ Edge Platforms
 
