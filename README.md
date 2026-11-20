@@ -24,8 +24,8 @@ The system covers **two inspection problems** on bottle production lines:
 
 | # | Problem | What it catches | Core approach |
 |---|---|---|---|
-| 1 | [**Appearance inspection**](#1--appearance-inspection-defects--foreign-objects) | Defects and foreign objects on the bottle: plastic threads/fibers, foreign particles, neck thread defects | Two-stage **RT-DETRv2** (crop → detect), TensorRT FP16, PLC-triggered capture and reject |
-| 2 | [**Label inspection**](#2--label-inspection-skewed--inverted-labels) | Skewed, inverted, misplaced or wrong labels | Cascaded **YOLO11** models, rule-based OK/NG via split lines, object tracking, Modbus alarm |
+| 1 | [**Appearance inspection**](#1--appearance-inspection-defects--foreign-objects) | Defects and foreign objects on the bottle: plastic threads/fibers, foreign particles, neck thread defects | Two-stage **RT-DETRv2** (crop → detect) + **anomaly detection (PatchCore)**, TensorRT FP16, PLC-triggered capture and reject |
+| 2 | [**Label inspection**](#2--label-inspection-skewed--inverted-labels) | Skewed, inverted, misplaced or wrong labels | Cascaded detectors (**YOLO11 / RTMDet / RT-DETR**) on **Basler** cameras, rule-based OK/NG via split lines, object tracking, Modbus alarm |
 
 Both run 24/7 on edge devices next to the line, decide **OK / NG** in real time, trigger rejection or alarms, and keep per-day images, logs and statistics.
 
@@ -46,15 +46,20 @@ flowchart LR
     PLCIN[Keyence PLC<br/>trigger bit 0→1] -->|Upper Link TCP| CAM[Basler GigE camera<br/>3840 × 2748]
     CAM -->|frame in RAM| Q[Inference queue]
     Q --> S1[Stage 1 · RT-DETR crop<br/>locate region of interest]
-    S1 --> S2[Stage 2 · RT-DETR defect<br/>TensorRT FP16]
-    S2 -- NG pulse --> PLCOUT[PLC → air blower /<br/>robot arm reject]
-    S2 --> STORE[(Images by work day<br/>logs · statistics)]
-    S2 -->|long-poll| UI[Web dashboard<br/>FastAPI + HTML/JS]
+    S1 --> S2[Stage 2 · RT-DETR defect<br/>known defect types]
+    S1 --> AN[Anomaly detection<br/>PatchCore · unknown defects]
+    S2 --> J{OK / NG}
+    AN --> J
+    J -- NG pulse --> PLCOUT[PLC → air blower /<br/>robot arm reject]
+    J --> STORE[(Images by work day<br/>logs · statistics)]
+    J -->|long-poll| UI[Web dashboard<br/>FastAPI + HTML/JS]
 ```
 
 ### Models
-- **Two-stage detection for tiny defects:** an **RT-DETRv2** model locates and crops the region of interest from the full 10 MP frame, then a second RT-DETRv2 model searches the crop for defects. Removing the background makes a tiny defect take up much more of the model input. The two models live in separate folders so a crop model can never be loaded into the defect step by mistake.
-- Also researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet and SSD-MobileNet, **PatchCore** anomaly detection for cases where defect samples are rare, and **DeepLabV3** segmentation (ResNet / ViT backbones).
+- **Two-stage detection for tiny defects:** an **RT-DETRv2** model locates and crops the region of interest from the full 10 MP frame, then a second RT-DETRv2 model searches the crop for known defect types. Removing the background makes a tiny defect take up much more of the model input. The two models live in separate folders so a crop model can never be loaded into the defect step by mistake.
+- **Anomaly detection for rare and unknown defects:** defect samples on a production line are scarce, and new defect types keep appearing. **PatchCore** (and similar unsupervised methods) learns only from **OK products** and flags any region that deviates from normal appearance, producing an anomaly score and heatmap. It catches foreign objects and defects that the detector was never trained on, and the anomaly models can be exported to ONNX for deployment.
+- **Detector + anomaly combined:** the detector names the defect type with high precision, and the anomaly model acts as a safety net for anything unusual.
+- Also researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet and SSD-MobileNet, and **DeepLabV3** segmentation (ResNet / ViT backbones).
 
 ### Edge inference engineering
 - **Three interchangeable backends:** PyTorch `.pth`, ONNX Runtime `.onnx` and TensorRT `.engine`, behind one interface.
@@ -94,9 +99,9 @@ Labels can be **inverted** (rotated 180° by feeding errors), **skewed / misalig
 
 ```mermaid
 flowchart LR
-    CAM[1–2 cameras per line<br/>USB / Dino-Lite] --> ROI[Per-camera ROI]
-    ROI --> M1[YOLO11 model 1<br/>bottle & label regions]
-    M1 -- gate class found --> M2[YOLO11 model 2<br/>label check]
+    CAM[1–2 cameras per line<br/>Basler · Dino-Lite / USB] --> ROI[Per-camera ROI]
+    ROI --> M1[Detector 1<br/>YOLO11 / RTMDet / RT-DETR<br/>bottle & label regions]
+    M1 -- gate class found --> M2[Detector 2<br/>YOLO11 / RTMDet / RT-DETR<br/>label check]
     M2 --> F[Per-class<br/>confidence filter]
     F --> R[Rule engine<br/>split lines → OK / NG]
     R --> T[Object tracker<br/>count zone]
@@ -104,8 +109,17 @@ flowchart LR
     T --> LOG[(NG images · daily counts<br/>raw video recording)]
 ```
 
+### Models
+- **Object detectors:** **YOLO11** (Ultralytics), **RTMDet** (MMDetection) and **RT-DETR**, trained and benchmarked for each product. The detector is chosen per line based on the accuracy / speed trade-off on the target device.
+- **ONNX export** for deployment, so the same pipeline can run any of the three model families.
+
+### Cameras
+- **Basler industrial cameras** (pypylon) for high-resolution, stable capture on fast lines
+- **Dino-Lite / USB cameras** for close-up views and quick setup
+- 1–2 cameras per line, each with its own ROI, rules and counters
+
 ### How OK / NG is decided
-- **Cascaded models with gating:** a second YOLO11 model runs only when the first one finds a required "gate" class (for example a correctly seated bottle neck). This saves compute on Jetson and avoids judging bottles that are only partly in view.
+- **Cascaded models with gating:** a second detector runs only when the first one finds a required "gate" class (for example a correctly seated bottle neck). This saves compute on Jetson and avoids judging bottles that are only partly in view.
 - **Detected parts:** the models detect the label regions that matter for each product, such as the front label (OK / NG), info panel, neck, QR code and recycle mark.
 - **Configurable rule engine instead of hard-coded logic:** each class gets a rule, either `always_ok`, `always_ng`, or `line_check`. With `line_check`, the detection center is compared with a **horizontal and/or vertical split line**, and each side maps to OK / NG / IGNORE. For example, if the label part that should be at the top is found below the line, the label is inverted. Supporting a new product only takes a configuration change, not new code.
 - **Per-class or global confidence thresholds**, so rare but critical classes can use their own threshold.
@@ -126,7 +140,7 @@ flowchart LR
 1. Record line video from the inspection cameras.
 2. Extract frames at a chosen target FPS.
 3. **Model-assisted auto-labeling:** a trained YOLO model pre-labels new frames (keeping the best box per class), images are converted to grayscale to be robust to lighting and label color, and a YOLO dataset with a train/val split is generated automatically.
-4. Review the labels, then retrain YOLO11 for each product.
+4. Review the labels, then retrain the detectors (YOLO11 / RTMDet / RT-DETR) for each product.
 
 ---
 
@@ -154,6 +168,7 @@ Models are optimized with **ONNX → TensorRT `.engine`** and **FP16 / INT8** qu
 ## ⚠️ Technical Challenges
 
 - **Tiny defects in huge images:** plastic fibers take up a tiny fraction of a 10 MP frame. Solved with two-stage crop → detect.
+- **Few defect samples:** NG products are rare and new defect types appear over time. Solved with PatchCore anomaly detection trained only on OK products.
 - **Many products, one system:** each product has a different label layout. Solved with product profiles and a configurable rule engine instead of per-product code.
 - **Counting each bottle once:** a bottle appears in dozens of frames. Solved with tracking and a count zone.
 - **Hardware limits:** real-time RT-DETR / YOLO on Jetson devices.
@@ -161,7 +176,7 @@ Models are optimized with **ONNX → TensorRT `.engine`** and **FP16 / INT8** qu
 
 ## 🛠️ Tech Stack
 
-`Python` · `PyTorch` · `RT-DETRv2` · `YOLO11 (Ultralytics)` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `CUDA` · `FastAPI` · `PyQt5` · `pypylon (Basler)` · `Keyence PLC (Upper Link)` · `pymodbus (Modbus RTU / RS485)` · `ESP32` · `Telegram API` · `PostgreSQL` · `Docker`
+`Python` · `PyTorch` · `RT-DETRv2` · `YOLO11 (Ultralytics)` · `RTMDet (MMDetection)` · `PatchCore (anomaly detection)` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `CUDA` · `FastAPI` · `PyQt5` · `pypylon (Basler)` · `Keyence PLC (Upper Link)` · `pymodbus (Modbus RTU / RS485)` · `ESP32` · `Telegram API` · `PostgreSQL` · `Docker`
 
 ## 🔗 Related
 
