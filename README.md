@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=drive_link"><img src="https://img.shields.io/badge/Demo-Video-FF0000?style=flat-square&logo=googledrive&logoColor=white" alt="Demo"/></a>
+  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4"><img src="https://img.shields.io/badge/Demo-Video-FF0000?style=flat-square&logo=googledrive&logoColor=white" alt="Demo"/></a>
   <img src="https://img.shields.io/badge/NVIDIA%20Jetson-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="Jetson"/>
   <img src="https://img.shields.io/badge/TensorRT-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="TensorRT"/>
   <img src="https://img.shields.io/badge/RT--DETR%20%7C%20YOLO11-111F68?style=flat-square" alt="RT-DETR | YOLO11"/>
@@ -30,6 +30,16 @@ The system covers **two inspection problems** on bottle production lines:
 Both run 24/7 on edge devices next to the line, decide **OK / NG** in real time, trigger rejection or alarms, and keep per-day images, logs and statistics.
 
 The systems are in production at the company in Vietnam and at its **parent company in Japan**.
+
+## 🎬 Demo
+
+<p align="center">
+  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4"><img src="https://img.shields.io/badge/▶%20Watch%20the%20demo%20videos-Google%20Drive-FF0000?style=for-the-badge&logo=googledrive&logoColor=white" alt="Watch the demo videos"/></a>
+</p>
+
+Demo videos of both systems running on real production lines: **appearance inspection** and **label inspection**.
+
+👉 https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4
 
 ---
 
