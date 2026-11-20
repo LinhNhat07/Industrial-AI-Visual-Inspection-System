@@ -171,7 +171,7 @@ flowchart LR
 | Platform | Role |
 |---|---|
 | NVIDIA Jetson Orin / Orin Nano Super (JetPack 5 / 6) | Production inference next to the line |
-| NVIDIA Jetson Nano / Raspberry Pi | Lightweight engines for simpler tasks |
+| NVIDIA Jetson Nano | Lightweight engines for simpler tasks |
 | RTX 5060 workstation | Training, data management, high-resolution inference |
 
 Models are optimized with **ONNX → TensorRT `.engine`** and **FP16 / INT8** quantization.
