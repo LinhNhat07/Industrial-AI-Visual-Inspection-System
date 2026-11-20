@@ -69,7 +69,8 @@ flowchart LR
 - **Two-stage detection for tiny defects:** an **RT-DETRv2** model locates and crops the region of interest from the full 10 MP frame, then a second RT-DETRv2 model searches the crop for known defect types. Removing the background makes a tiny defect take up much more of the model input. The two models live in separate folders so a crop model can never be loaded into the defect step by mistake.
 - **Anomaly detection for rare and unknown defects:** defect samples on a production line are scarce, and new defect types keep appearing. **PatchCore** (and similar unsupervised methods) learns only from **OK products** and flags any region that deviates from normal appearance, producing an anomaly score and heatmap. It catches foreign objects and defects that the detector was never trained on, and the anomaly models can be exported to ONNX for deployment.
 - **Detector + anomaly combined:** the detector names the defect type with high precision, and the anomaly model acts as a safety net for anything unusual.
-- Also researched and benchmarked YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet and SSD-MobileNet, and **DeepLabV3** segmentation (ResNet / ViT backbones).
+- **Other detectors benchmarked:** YOLO (v8, v11, YOLOX, YOLO-NAS), RTMDet, **EfficientDet**, **Detectron2 (Faster R-CNN, …)** and SSD-MobileNet, compared on accuracy for tiny defects and on speed on the target device.
+- **Segmentation:** **DeepLabV3** (ResNet / ViT backbones).
 
 ### Edge inference engineering
 - **Three interchangeable backends:** PyTorch `.pth`, ONNX Runtime `.onnx` and TensorRT `.engine`, behind one interface.
@@ -120,8 +121,8 @@ flowchart LR
 ```
 
 ### Models
-- **Object detectors:** **YOLO11** (Ultralytics), **RTMDet** (MMDetection) and **RT-DETR**, trained and benchmarked for each product. The detector is chosen per line based on the accuracy / speed trade-off on the target device.
-- **ONNX export** for deployment, so the same pipeline can run any of the three model families.
+- **Object detectors:** **YOLO11** (Ultralytics), **RTMDet** (MMDetection) and **RT-DETR**, plus **EfficientDet** and **Detectron2 (Faster R-CNN, …)**, trained and benchmarked for each product. The detector is chosen per line based on the accuracy / speed trade-off on the target device.
+- **ONNX export** for deployment, so the same pipeline can run different model families.
 
 ### Cameras
 - **Basler industrial cameras** (pypylon) for high-resolution, stable capture on fast lines
@@ -186,7 +187,7 @@ Models are optimized with **ONNX → TensorRT `.engine`** and **FP16 / INT8** qu
 
 ## 🛠️ Tech Stack
 
-`Python` · `PyTorch` · `RT-DETRv2` · `YOLO11 (Ultralytics)` · `RTMDet (MMDetection)` · `PatchCore (anomaly detection)` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `CUDA` · `FastAPI` · `PyQt5` · `pypylon (Basler)` · `Keyence PLC (Upper Link)` · `pymodbus (Modbus RTU / RS485)` · `ESP32` · `Telegram API` · `PostgreSQL` · `Docker`
+`Python` · `PyTorch` · `RT-DETRv2` · `YOLO11 (Ultralytics)` · `RTMDet (MMDetection)` · `EfficientDet` · `Detectron2 (Faster R-CNN)` · `PatchCore (anomaly detection)` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `CUDA` · `FastAPI` · `PyQt5` · `pypylon (Basler)` · `Keyence PLC (Upper Link)` · `pymodbus (Modbus RTU / RS485)` · `ESP32` · `Telegram API` · `PostgreSQL` · `Docker`
 
 ## 👤 Author
 
