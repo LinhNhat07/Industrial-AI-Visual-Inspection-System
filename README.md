@@ -188,10 +188,6 @@ Models are optimized with **ONNX → TensorRT `.engine`** and **FP16 / INT8** qu
 
 `Python` · `PyTorch` · `RT-DETRv2` · `YOLO11 (Ultralytics)` · `RTMDet (MMDetection)` · `PatchCore (anomaly detection)` · `OpenCV` · `GStreamer` · `ONNX Runtime` · `TensorRT` · `CUDA` · `FastAPI` · `PyQt5` · `pypylon (Basler)` · `Keyence PLC (Upper Link)` · `pymodbus (Modbus RTU / RS485)` · `ESP32` · `Telegram API` · `PostgreSQL` · `Docker`
 
-## 🔗 Related
-
-- [Defect Classification for Medium and Small-Scale Flaws](https://github.com/LinhNhat07/Defect-Classication-for-Medium-and-Small-Scale-Flaws): Keyence XG-X + YOLOv11 hybrid inspection
-
 ## 👤 Author
 
 **Nguyen Hong Nhat Linh** – AI Engineer · [GitHub](https://github.com/LinhNhat07) · nlinh.nh7@gmail.com
