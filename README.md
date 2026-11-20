@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4"><img src="https://img.shields.io/badge/Demo-Video-FF0000?style=flat-square&logo=googledrive&logoColor=white" alt="Demo"/></a>
+  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=sharing"><img src="https://img.shields.io/badge/Demo-Video-FF0000?style=flat-square&logo=googledrive&logoColor=white" alt="Demo"/></a>
   <img src="https://img.shields.io/badge/NVIDIA%20Jetson-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="Jetson"/>
   <img src="https://img.shields.io/badge/TensorRT-76B900?style=flat-square&logo=nvidia&logoColor=white" alt="TensorRT"/>
   <img src="https://img.shields.io/badge/RT--DETR%20%7C%20YOLO11-111F68?style=flat-square" alt="RT-DETR | YOLO11"/>
@@ -34,12 +34,22 @@ The systems are in production at the company in Vietnam and at its **parent comp
 ## 🎬 Demo
 
 <p align="center">
-  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4"><img src="https://img.shields.io/badge/▶%20Watch%20the%20demo%20videos-Google%20Drive-FF0000?style=for-the-badge&logo=googledrive&logoColor=white" alt="Watch the demo videos"/></a>
+  <a href="https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=sharing"><img src="https://img.shields.io/badge/▶%20Watch%20the%20demos-Google%20Drive-FF0000?style=for-the-badge&logo=googledrive&logoColor=white" alt="Watch the demos"/></a>
 </p>
 
-Demo videos of both systems running on real production lines: **appearance inspection** and **label inspection**.
+Videos and images of the systems running on real production lines, in the shared folder **Industrial-AI-Visual-Inspection_Demos**:
 
-👉 https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4
+| # | Folder | Content |
+|---|---|---|
+| 01 | Appearance-Inspection_Bottle-Bottom-Thread-Detection | Product, raw camera image, NG detection (plastic thread) and OK result |
+| 02 | Appearance-Inspection_Anomaly-Detection-PatchCore | Anomaly detection trained only on OK products |
+| 03 | Appearance-Inspection_Defect-Classification-Keyence-YOLOv11 | Keyence XG-X + YOLOv11 classification of foreign body, deformation, neck/rim, thread and plastic defects |
+| 04 | Label-Inspection_Skewed-Inverted-Labels | Real-time detection of skewed and inverted labels |
+| 05 | Label-Inspection_Inverted-Label-Product-A | Inverted-label inspection on a second product |
+| 06 | Label-Inspection_Inverted-Label-Product-B | Four inspection views around a round bottle, plus real-time and remote monitoring on the line in Japan |
+| 07 | Cavity-ID-Recognition_Bottle-Neck | Reading the embossed mold cavity ID (e.g. 1A, 2D) on the bottle neck, NG on mismatch |
+
+👉 https://drive.google.com/drive/folders/1SxIDtwbnsQlO3FvqJkyTdKspGBzYx1n4?usp=sharing
 
 ---
 
